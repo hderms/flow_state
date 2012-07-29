@@ -1,17 +1,23 @@
-require 'twitter'
+require 'tweetstream'
 require 'juggernaut'
 require 'set'
+require 'cgi'
 seen_tweets = Set.new
-while true
-  sleep 5
-   status =Twitter.search("#ruby", rpp:1, result_type: "recent").to_hash 
 
-    texts = status[:results].map{|result| result[:text]}
-    
+TweetStream.configure do |config|
+  config.username     = 'TwittyCaca'
+  config.password     = '123123123'
+  config.auth_method  = :basic
+end 
+status = TweetStream::Client.new.sample do |status|
 
-    new_tweets =  texts.select {|text| !seen_tweets.include?(text) and !text.is_empty? and !text.is_nil?}
-     
-    puts new_tweets
-      Juggernaut.publish("channel1", new_tweets) 
-    seen_tweets += new_tweets
+
+
+  puts status.text
+
+
+  unless status.text.empty?  or status.text.nil?
+    Juggernaut.publish("channel1", CGI::escapeHTML(status.text))
+  end
+  seen_tweets += status.text
 end

@@ -1,18 +1,46 @@
-
-<div class="history" style="background: gray; border-radius: 3px; border: 3px black solid;"></div>
-
-<script src="http://code.jquery.com/jquery.min.js"></script>`
-<script src="./jquery.isotope.min.js"></script>
-
-<script src="http://<%= request.host%>:8080/application.js" type="text/javascript" charset="utf-8"></script>
-<script type="text/javascript" charset="utf-8">
-  $(function() {
-      var $isotope_container = $(".history");
-      $isotope_container.isotope({
-itemSelector: 'p'
-});
+<html>
+  <head>
+    <style> 
+      .tweet-element {
+        background: white;
+        border-radius: 5px;
+        border: 5px black solid;
+        min-height: 50px;
+        max-width: 100px;
+        width: 100px;
+        margin: 5px;
+      }
+      .tweet-container {
+        min-width: 100px;
+        min-height: 500px;
+      }
+    </style>
+    <script src="http://code.jquery.com/jquery.min.js"></script>`
+    <script src="./jquery.isotope.min.js"></script>
+    <script src="http://<%= request.host%>:8080/application.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" charset="utf-8">
+      $(function() {
+        var $isotope_container = $(".tweet-container");
+        $isotope_container.isotope({
+          itemSelector: 'div'
+        });
+      });
       var jug = new Juggernaut;
       jug.subscribe("channel1", function(data){
-        $(".history").append('<p>' + data + '</p>')
-        });
-      </script>
+        $element = $(('<div class="tweet-element">' +  data  +  '</div>'));
+        $element.width(100 + Math.random());
+        $(".tweet-container").isotope('insert', $element); 
+      });
+    </script>
+
+  </head>
+  <body>
+    <div class="tweet-container" style="background: gray; border-radius: 3px; border: 3px black solid;">
+      <div class="tweet-element">This is a twitter site!</div>
+      <div class="tweet-element">Everyone likes seeing twitter messages</div>
+      <div class="tweet-element">Everyone likes ruby! </div>
+    </div>
+
+  </body>
+
+</html>
